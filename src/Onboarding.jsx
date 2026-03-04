@@ -10,11 +10,14 @@ const steps = [
       { label: "Não Binário", icon: "⊕" },
     ]
   },
-  { id: "current_body", type: "single", question: "Escolha seu tipo de corpo atual",
+  { id: "current_body", type: "body_current", question: "Escolha seu tipo de corpo atual" },
+  { id: "pain_points", type: "radio", question: "O que está te incomodando mais agora?",
     options: [
-      { label: "Magro",     desc: "IMC < 18.5 · Pouca gordura corporal", icon: "🔵" },
-      { label: "Médio",     desc: "IMC 18.5–24.9 · Peso saudável",    icon: "🟢" },
-      { label: "Sobrepeso", desc: "IMC > 25 · Acima do peso ideal",      icon: "🟠" },
+      { label: "Tensão no corpo" },
+      { label: "Estresse e ansiedade" },
+      { label: "Fadiga e baixa energia" },
+      { label: "Sono ruim" },
+      { label: "Apenas curioso para experimentar" },
     ]
   },
   { id: "goal", type: "single", question: "Qual é o seu objetivo principal?",
@@ -25,6 +28,7 @@ const steps = [
       { label: "Saúde e bem-estar",       icon: "❤️" },
     ]
   },
+  { id: "body_target", type: "body_target", question: "Escolha um tipo de corpo alvo" },
   { id: "experience", type: "single", question: "Qual é o seu nível de experiência?",
     options: [
       { label: "Iniciante",     desc: "Menos de 6 meses", icon: "🌱" },
@@ -51,6 +55,16 @@ const steps = [
       { label: "Pernas",     icon: "🦵" },
       { label: "Glúteos",    icon: "🍑" },
       { label: "Corpo todo", icon: "🧍" },
+    ]
+  },
+  { id: "avoid_areas", type: "avoid_areas", question: "Alguma parte do corpo a evitar durante o treino?",
+    subtitle: "Excluiremos os movimentos que visam essas áreas do seu plano personalizado." },
+  { id: "workout_level", type: "radio", question: "Qual nível de treino você prefere?",
+    options: [
+      { label: "Mantenha leve e fácil" },
+      { label: "Estou bem com algum esforço" },
+      { label: "Traga a intensidade" },
+      { label: "Deixemos decidir" },
     ]
   },
   { id: "duration", type: "single", question: "Quanto tempo você quer que seus treinos durem?",
@@ -82,7 +96,15 @@ const steps = [
       { label: "Alto o dia todo",        icon: "⚡" },
     ]
   },
-  { id: "bmi_summary", type: "bmi_summary", question: "Resumo do seu perfil" },
+  { id: "sleep_hours", type: "radio", question: "Quantas horas de sono você tem?",
+    options: [
+      { label: "Menos de 5 horas" },
+      { label: "Entre 5 e 6 horas" },
+      { label: "Entre 7 e 8 horas" },
+      { label: "Mais de 8 horas" },
+    ]
+  },
+  { id: "bmi_summary", type: "bmi_summary", question: "Resumo do seu nível ativo" },
 ];
 
 function calcBMI(wKg, hCm) {
@@ -169,7 +191,7 @@ export default function Onboarding({ onComplete }) {
 
   const next = () => { if (cur < steps.length - 1) { setCur(c => c + 1); } else { if (onComplete) onComplete(ans); else setDone(true); } };
   const back = () => cur > 0 && setCur(c => c - 1);
-  const needBtn = ["multi","age","height","weight","target_weight","bmi_summary"].includes(step.type);
+  const needBtn = ["multi","age","height","weight","target_weight","bmi_summary","avoid_areas"].includes(step.type);
   const canNext = step.type === "multi" ? (ans[step.id] || []).length > 0 : true;
 
   const renderBody = () => {
@@ -325,61 +347,176 @@ export default function Onboarding({ onComplete }) {
 
     if (step.type === "bmi_summary") {
       const pos = cat ? cat.pos : 50;
-      const rows = [
-        { lbl:"Objetivo",     val: ans.goal || "—" },
-        { lbl:"Experiência",  val: ans.experience || "—" },
-        { lbl:"Frequência",   val: ans.frequency || "—" },
-        { lbl:"Duração",      val: ans.duration || "—" },
-        { lbl:"Hidratação",   val: ans.water || "—" },
-        { lbl:"Energia",      val: ans.energy || "—" },
-      ];
+
+
       return (
         <div>
-          <div style={{ marginBottom:24 }}>
-            <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:10 }}>
-              <span style={{ fontSize:13, color:"#64748b", fontWeight:"500" }}>IMC calculado</span>
-              <span style={{ fontSize:14, fontWeight:"800", color:cat ? cat.color : "#0f172a" }}>{cat ? cat.label : ""} — {bmi}</span>
+          {/* IMC bar */}
+          <div style={{ marginBottom:20 }}>
+            <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:8 }}>
+              <span style={{ fontSize:12, color:"#94a3b8", fontWeight:"600" }}>Índice de Massa Corporal (IMC)</span>
+              <span style={{ fontSize:14, fontWeight:"800", color:cat?cat.color:"#0f172a" }}>{cat?cat.label:""}–{bmi}</span>
             </div>
-            <div style={{ position:"relative", height:14, borderRadius:99, background:"linear-gradient(to right,#60a5fa,#34d399,#facc15,#fb923c,#f87171)" }}>
-              <div style={{ position:"absolute", bottom:20, left:pos+"%", transform:"translateX(-50%)", background:ACCENT, color:"#fff", borderRadius:8, padding:"4px 10px", fontSize:12, fontWeight:"800", whiteSpace:"nowrap", boxShadow:"0 2px 8px rgba(37,99,235,0.35)" }}>
-                Você — {bmi}
+            <div style={{ position:"relative", height:12, borderRadius:99, background:"linear-gradient(to right,#60a5fa,#34d399,#facc15,#fb923c,#f87171)", marginBottom:6 }}>
+              <div style={{ position:"absolute", bottom:18, left:pos+"%", transform:"translateX(-50%)", background:ACCENT, color:"#fff", borderRadius:8, padding:"3px 10px", fontSize:12, fontWeight:"800", whiteSpace:"nowrap", boxShadow:"0 2px 8px rgba(37,99,235,0.35)" }}>
+                Você – {bmi}
               </div>
-              <div style={{ position:"absolute", top:"50%", left:pos+"%", transform:"translate(-50%,-50%)", width:22, height:22, borderRadius:"50%", background:"#fff", border:"3px solid "+(cat ? cat.color : ACCENT), boxShadow:"0 2px 8px rgba(0,0,0,0.2)" }} />
+              <div style={{ position:"absolute", top:"50%", left:pos+"%", transform:"translate(-50%,-50%)", width:20, height:20, borderRadius:"50%", background:"#fff", border:"3px solid "+(cat?cat.color:ACCENT), boxShadow:"0 2px 8px rgba(0,0,0,0.2)" }} />
             </div>
-            <div style={{ display:"flex", justifyContent:"space-between", fontSize:11, color:"#94a3b8", marginTop:8 }}>
-              <span>Abaixo</span><span>Normal</span><span>Sobrepeso</span><span>Obeso</span>
+            <div style={{ display:"flex", justifyContent:"space-between", fontSize:10, color:"#94a3b8", marginTop:4 }}>
+              <span>Abaixo do peso</span><span>Normal</span><span style={{color:cat&&cat.label==="Sobrepeso"?cat.color:"#94a3b8",fontWeight:cat&&cat.label==="Sobrepeso"?"700":"400"}}>Sobrepeso</span><span>Obeso</span>
             </div>
           </div>
-          <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:8, marginBottom:16 }}>
+
+          {/* Info rows */}
+          <div style={{ display:"flex", flexDirection:"column", gap:12, marginBottom:16 }}>
             {[
-              { icon:"📐", lbl:"Altura", val:ans.height_cm+" cm" },
-              { icon:"⚖️", lbl:"Peso",   val:ans.weight_kg+" kg" },
-              { icon:"🎂", lbl:"Idade",  val:ans.age+" anos" },
+              { icon:"🏋️", label:"Exercício",         val: ans.experience || "Iniciante" },
+              { icon:"📊", label:"Nível de atividade", val: ans.frequency || "—" },
+              { icon:"☯️",  label:"Nível de Treino",   val: ans.workout_level || ans.experience || "—" },
             ].map(r => (
-              <div key={r.lbl} style={{ background:"#f8fafc", borderRadius:14, padding:"12px 10px", textAlign:"center" }}>
-                <div style={{ fontSize:20, marginBottom:4 }}>{r.icon}</div>
-                <div style={{ fontSize:11, color:"#94a3b8", fontWeight:"600" }}>{r.lbl}</div>
-                <div style={{ fontSize:13, fontWeight:"800", color:"#0f172a", marginTop:2 }}>{r.val}</div>
-              </div>
-            ))}
-          </div>
-          <div style={{ background:"#f8fafc", borderRadius:20, padding:16, marginBottom:16 }}>
-            {rows.map((r, i) => (
-              <div key={r.lbl} style={{ display:"flex", alignItems:"center", gap:12, padding:"9px 0", borderBottom:i<rows.length-1?"1px solid #e2e8f0":"none" }}>
-                <div style={{ flex:1 }}>
-                  <div style={{ fontSize:11, color:"#94a3b8", fontWeight:"700", textTransform:"uppercase", letterSpacing:"0.4px" }}>{r.lbl}</div>
-                  <div style={{ fontSize:13, fontWeight:"700", color:"#0f172a", marginTop:1 }}>{r.val}</div>
+              <div key={r.label} style={{ display:"flex", alignItems:"center", gap:12 }}>
+                <div style={{ width:40, height:40, borderRadius:12, background:"#EFF6FF", display:"flex", alignItems:"center", justifyContent:"center", fontSize:20, flexShrink:0 }}>{r.icon}</div>
+                <div>
+                  <div style={{ fontSize:11, color:"#94a3b8", fontWeight:"600" }}>{r.label}</div>
+                  <div style={{ fontSize:14, fontWeight:"800", color:"#0f172a" }}>{r.val}</div>
                 </div>
               </div>
             ))}
           </div>
+
+          {/* Aviso IMC */}
           {cat && cat.label !== "Normal"
-            ? <InfoCard emoji="⚠️" bg="#fff7ed" title="Atenção ao seu IMC" body="Um IMC fora da faixa normal pode estar associado a riscos cardiovasculares. Seu plano será 100% personalizado." />
-            : <InfoCard emoji="✅" bg="#f0fdf4" title="IMC saudável!" body="Vamos focar em desempenho, composição corporal e longevidade." />
+            ? <div style={{ background:"#fffbeb", border:"1px solid #fde68a", borderRadius:16, padding:"14px 16px", display:"flex", gap:12, alignItems:"flex-start" }}>
+                <span style={{ fontSize:22, flexShrink:0 }}>⚠️</span>
+                <div>
+                  <div style={{ fontWeight:"700", fontSize:14, color:"#0f172a", marginBottom:4 }}>Riscos de um IMC não saudável</div>
+                  <div style={{ fontSize:12, color:"#64748b", lineHeight:1.6 }}>Hipertensão, doenças cardíacas, acidente vascular cerebral, diabetes tipo 2, alguns tipos de câncer, osteoartrite, dor nas costas.</div>
+                </div>
+              </div>
+            : <div style={{ background:"#f0fdf4", border:"1px solid #86efac", borderRadius:16, padding:"14px 16px", display:"flex", gap:12, alignItems:"flex-start" }}>
+                <span style={{ fontSize:22 }}>✅</span>
+                <div>
+                  <div style={{ fontWeight:"700", fontSize:14, color:"#0f172a", marginBottom:4 }}>IMC saudável!</div>
+                  <div style={{ fontSize:12, color:"#64748b", lineHeight:1.6 }}>Vamos focar em desempenho, composição corporal e longevidade.</div>
+                </div>
+              </div>
           }
         </div>
       );
     }
+    if (step.type === "radio") return (
+      <div style={{ display:"flex", flexDirection:"column", gap:12, marginTop:8 }}>
+        {step.options.map(o => {
+          const sel = ans[step.id] === o.label;
+          return (
+            <button
+              key={o.label}
+              onClick={() => { setAns({ ...ans, [step.id]: o.label }); setTimeout(next, 180); }}
+              style={{
+                background: sel ? "#EFF6FF" : "#f1f5f9",
+                border: sel ? "2px solid " + ACCENT : "2px solid transparent",
+                borderRadius: 16, cursor: "pointer", width: "100%",
+                display: "flex", alignItems: "center", justifyContent: "space-between",
+                padding: "18px 20px", transition: "all 0.15s",
+              }}
+            >
+              <span style={{ fontSize: 15, fontWeight: "500", color: "#0f172a", textAlign: "left" }}>{o.label}</span>
+              <span style={{
+                width: 22, height: 22, borderRadius: "50%", flexShrink: 0,
+                border: sel ? "6px solid " + ACCENT : "2px solid #cbd5e1",
+                background: "#fff", display: "inline-block", transition: "all 0.15s",
+              }} />
+            </button>
+          );
+        })}
+      </div>
+    );
+
+    if (step.type === "body_current") {
+      const bodies = [
+        { label: "Magro",     desc: "IMC < 18.5 · Pouca gordura corporal", emoji:"🦴", bg:"#dbeafe" },
+        { label: "Média",     desc: "IMC 18.5–24.9 · Peso saudável",       emoji:"🏃", bg:"#dcfce7" },
+        { label: "Sobrepeso", desc: "IMC > 25 · Acima do peso ideal",        emoji:"💪", bg:"#fef9c3" },
+      ];
+      return (
+        <div style={{ display:"flex", flexDirection:"column", gap:12, marginTop:8 }}>
+          {bodies.map(b => {
+            const sel = ans.current_body === b.label;
+            return (
+              <button key={b.label} onClick={() => { setAns({ ...ans, current_body: b.label }); setTimeout(next, 200); }}
+                style={{ background:sel?"#EFF6FF":"#f8fafc", border:sel?"2px solid "+ACCENT:"2px solid transparent", borderRadius:18, cursor:"pointer", width:"100%", display:"flex", alignItems:"center", gap:16, padding:"16px 20px", transition:"all 0.15s", boxShadow:sel?"0 4px 14px rgba(37,99,235,0.15)":"0 1px 3px rgba(0,0,0,0.06)", textAlign:"left" }}>
+                <div style={{ width:56, height:56, borderRadius:14, background:sel?"#dbeafe":b.bg, display:"flex", alignItems:"center", justifyContent:"center", fontSize:28, flexShrink:0 }}>{b.emoji}</div>
+                <div style={{ flex:1 }}>
+                  <div style={{ fontSize:17, fontWeight:"700", color:sel?ACCENT:"#0f172a" }}>{b.label}</div>
+                  <div style={{ fontSize:12, color:"#94a3b8", marginTop:3 }}>{b.desc}</div>
+                </div>
+                <span style={{ width:22, height:22, borderRadius:"50%", flexShrink:0, border:sel?"7px solid "+ACCENT:"2px solid #cbd5e1", background:"#fff", display:"inline-block", transition:"all 0.15s" }} />
+              </button>
+            );
+          })}
+        </div>
+      );
+    }
+
+
+    if (step.type === "body_target") {
+      const bodies = [
+        { label: "Ajustar",     desc: "Perder gordura e definir",        emoji:"🔥", bg:"#fee2e2" },
+        { label: "Em massa",    desc: "Ganhar músculo e volume",           emoji:"💪", bg:"#ede9fe" },
+        { label: "Carga extra", desc: "Máxima performance e força",        emoji:"🏆", bg:"#fef9c3" },
+      ];
+      return (
+        <div style={{ display:"flex", flexDirection:"column", gap:12, marginTop:8 }}>
+          {bodies.map(b => {
+            const sel = ans.body_target === b.label;
+            return (
+              <button key={b.label} onClick={() => { setAns({ ...ans, body_target: b.label }); setTimeout(next, 200); }}
+                style={{ background:sel?"#EFF6FF":"#f8fafc", border:sel?"2px solid "+ACCENT:"2px solid transparent", borderRadius:18, cursor:"pointer", width:"100%", display:"flex", alignItems:"center", gap:16, padding:"16px 20px", transition:"all 0.15s", boxShadow:sel?"0 4px 14px rgba(37,99,235,0.15)":"0 1px 3px rgba(0,0,0,0.06)", textAlign:"left" }}>
+                <div style={{ width:56, height:56, borderRadius:14, background:sel?"#EFF6FF":b.bg, display:"flex", alignItems:"center", justifyContent:"center", fontSize:28, flexShrink:0 }}>{b.emoji}</div>
+                <div style={{ flex:1 }}>
+                  <div style={{ fontSize:17, fontWeight:"700", color:sel?ACCENT:"#0f172a" }}>{b.label}</div>
+                  <div style={{ fontSize:12, color:"#94a3b8", marginTop:3 }}>{b.desc}</div>
+                </div>
+                <span style={{ width:22, height:22, borderRadius:"50%", flexShrink:0, border:sel?"7px solid "+ACCENT:"2px solid #cbd5e1", background:"#fff", display:"inline-block", transition:"all 0.15s" }} />
+              </button>
+            );
+          })}
+        </div>
+      );
+    }
+
+    if (step.type === "avoid_areas") {
+      const opts = ["Estou bem", "Ombro", "Voltar", "Pulso", "Quadril", "Joelho", "Tornozelo"];
+      const sel = ans.avoid_areas || [];
+      const toggle = (lbl) => {
+        if (lbl === "Estou bem") {
+          setAns({ ...ans, avoid_areas: sel.includes("Estou bem") ? [] : ["Estou bem"] });
+        } else {
+          const without = sel.filter(x => x !== "Estou bem");
+          setAns({ ...ans, avoid_areas: without.includes(lbl) ? without.filter(x => x !== lbl) : [...without, lbl] });
+        }
+      };
+      const emojiMap = { "Estou bem":"👌", "Ombro":"💪", "Voltar":"🔙", "Pulso":"✊", "Quadril":"🦵", "Joelho":"🦵", "Tornozelo":"🦶" };
+      return (
+        <div style={{ display:"flex", flexDirection:"column", gap:10, marginTop:8 }}>
+          {opts.map(o => {
+            const on = sel.includes(o);
+            return (
+              <button key={o} onClick={() => toggle(o)}
+                style={{ background:on?"#EFF6FF":"#f8fafc", border:on?"2px solid "+ACCENT:"2px solid transparent", borderRadius:16, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"space-between", padding:"14px 18px", transition:"all 0.15s", boxShadow:on?"0 2px 8px rgba(37,99,235,0.12)":"0 1px 3px rgba(0,0,0,0.05)" }}>
+                <div style={{ display:"flex", alignItems:"center", gap:12 }}>
+                  <span style={{ fontSize:22 }}>{emojiMap[o] || "💪"}</span>
+                  <span style={{ fontSize:15, fontWeight:"500", color:on?ACCENT:"#0f172a" }}>{o}</span>
+                </div>
+                <span style={{ width:20, height:20, borderRadius:"50%", flexShrink:0, border:on?"6px solid "+ACCENT:"2px solid #cbd5e1", background:"#fff", display:"inline-block", transition:"all 0.15s" }} />
+              </button>
+            );
+          })}
+        </div>
+      );
+    }
+
     return null;
   };
 
@@ -447,7 +584,7 @@ export default function Onboarding({ onComplete }) {
 }
 
 const S = {
-  q:   { fontSize:24, fontWeight:"900", color:"#0f172a", lineHeight:1.25, marginBottom:2, letterSpacing:"-0.5px" },
+  q:   { fontSize:24, fontWeight:"900", color:"#0f172a", lineHeight:1.25, marginBottom:2, letterSpacing:"-0.5px", textAlign:"center" },
   opt: { background:"#f8fafc", border:"2px solid transparent", borderRadius:16, cursor:"pointer", textAlign:"left", transition:"all 0.15s", width:"100%" },
   optSel: { background:"#EFF6FF", borderColor:ACCENT },
 };
