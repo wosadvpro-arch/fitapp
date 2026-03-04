@@ -138,7 +138,7 @@ function NumberPicker({ value, onChange, min, max, step=1, unit="" }) {
         <button onClick={() => onChange(Math.max(min, parseFloat((value - step).toFixed(1))))} style={BtnCircle}>−</button>
         <div>
           <span style={{ fontSize:72, fontWeight:"900", color:"#0f172a", letterSpacing:"-3px" }}>{value}</span>
-          <span style={{ fontSize:20, color:"#64748b", marginLeft:6 }}>{unit}</span>
+          <span style={{ fontSize:18, color:"#64748b", marginLeft:6 }}>{unit}</span>
         </div>
         <button onClick={() => onChange(Math.min(max, parseFloat((value + step).toFixed(1))))} style={BtnCircle}>+</button>
       </div>
@@ -158,8 +158,8 @@ function InfoCard({ emoji, title, body, bg="#f1f5f9" }) {
       <div style={{ display:"flex", gap:10, alignItems:"flex-start" }}>
         <span style={{ fontSize:22, flexShrink:0 }}>{emoji}</span>
         <div>
-          <p style={{ margin:0, fontWeight:"700", fontSize:14, color:"#0f172a" }}>{title}</p>
-          <p style={{ margin:"3px 0 0", fontSize:12, color:"#64748b", lineHeight:1.5 }}>{body}</p>
+          <p style={{ margin:0, fontWeight:"700", fontSize:15, color:"#0f172a" }}>{title}</p>
+          <p style={{ margin:"3px 0 0", fontSize:13, color:"#64748b", lineHeight:1.6 }}>{body}</p>
         </div>
       </div>
     </div>
@@ -204,9 +204,9 @@ export default function Onboarding({ onComplete }) {
               {o.icon && <span style={{ fontSize:22 }}>{o.icon}</span>}
               <div style={{ flex:1, textAlign:"left" }}>
                 <div style={{ fontSize:15, fontWeight:"600", color:sel ? ACCENT : "#0f172a" }}>{o.label}</div>
-                {o.desc && <div style={{ fontSize:12, color:"#94a3b8", marginTop:2 }}>{o.desc}</div>}
+                {o.desc && <div style={{ fontSize:13, color:"#94a3b8", marginTop:4 }}>{o.desc}</div>}
               </div>
-              {sel && <span style={{ fontSize:18, color:ACCENT }}>✓</span>}
+              {sel && <span style={{ fontSize:16, color:ACCENT }}>✓</span>}
             </button>
           );
         })}
@@ -220,8 +220,8 @@ export default function Onboarding({ onComplete }) {
           return (
             <button key={o.label} onClick={() => pick(o.label)} className={`opt-btn grid${sel?" sel":""}`}>
               <span style={{ fontSize:26 }}>{o.icon}</span>
-              <span style={{ fontSize:13, fontWeight:"600", color:sel ? ACCENT : "#0f172a", textAlign:"center" }}>{o.label}</span>
-              {sel && <span style={{ fontSize:11, color:ACCENT, fontWeight:"800" }}>✓ selecionado</span>}
+              <span style={{ fontSize:15, fontWeight:"600", color:sel ? ACCENT : "#0f172a", textAlign:"center" }}>{o.label}</span>
+              {sel && <span style={{ fontSize:12, color:ACCENT, fontWeight:"700" }}>✓ selecionado</span>}
             </button>
           );
         })}
@@ -355,15 +355,15 @@ export default function Onboarding({ onComplete }) {
           <div style={{ marginBottom:20 }}>
             <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:8 }}>
               <span style={{ fontSize:12, color:"#94a3b8", fontWeight:"600" }}>Índice de Massa Corporal (IMC)</span>
-              <span style={{ fontSize:14, fontWeight:"800", color:cat?cat.color:"#0f172a" }}>{cat?cat.label:""}–{bmi}</span>
+              <span style={{ fontSize:15, fontWeight:"700", color:cat?cat.color:"#0f172a" }}>{cat?cat.label:""}–{bmi}</span>
             </div>
             <div style={{ position:"relative", height:12, borderRadius:99, background:"linear-gradient(to right,#60a5fa,#34d399,#facc15,#fb923c,#f87171)", marginBottom:6 }}>
-              <div style={{ position:"absolute", bottom:18, left:pos+"%", transform:"translateX(-50%)", background:ACCENT, color:"#fff", borderRadius:8, padding:"3px 10px", fontSize:12, fontWeight:"800", whiteSpace:"nowrap", boxShadow:"0 2px 8px rgba(37,99,235,0.35)" }}>
+              <div style={{ position:"absolute", bottom:18, left:pos+"%", transform:"translateX(-50%)", background:ACCENT, color:"#fff", borderRadius:8, padding:"3px 10px", fontSize:12, fontWeight:"700", whiteSpace:"nowrap", boxShadow:"0 2px 8px rgba(37,99,235,0.35)" }}>
                 Você – {bmi}
               </div>
               <div style={{ position:"absolute", top:"50%", left:pos+"%", transform:"translate(-50%,-50%)", width:20, height:20, borderRadius:"50%", background:"#fff", border:"3px solid "+(cat?cat.color:ACCENT), boxShadow:"0 2px 8px rgba(0,0,0,0.2)" }} />
             </div>
-            <div style={{ display:"flex", justifyContent:"space-between", fontSize:10, color:"#94a3b8", marginTop:4 }}>
+            <div style={{ display:"flex", justifyContent:"space-between", fontSize:11, color:"#94a3b8", marginTop:6 }}>
               <span>Abaixo do peso</span><span>Normal</span><span style={{color:cat&&cat.label==="Sobrepeso"?cat.color:"#94a3b8",fontWeight:cat&&cat.label==="Sobrepeso"?"700":"400"}}>Sobrepeso</span><span>Obeso</span>
             </div>
           </div>
@@ -378,8 +378,8 @@ export default function Onboarding({ onComplete }) {
               <div key={r.label} style={{ display:"flex", alignItems:"center", gap:12 }}>
                 <div style={{ width:40, height:40, borderRadius:12, background:"#EFF6FF", display:"flex", alignItems:"center", justifyContent:"center", fontSize:20, flexShrink:0 }}>{r.icon}</div>
                 <div>
-                  <div style={{ fontSize:11, color:"#94a3b8", fontWeight:"600" }}>{r.label}</div>
-                  <div style={{ fontSize:14, fontWeight:"800", color:"#0f172a" }}>{r.val}</div>
+                  <div style={{ fontSize:12, color:"#94a3b8", fontWeight:"600" }}>{r.label}</div>
+                  <div style={{ fontSize:15, fontWeight:"700", color:"#0f172a" }}>{r.val}</div>
                 </div>
               </div>
             ))}
@@ -390,15 +390,15 @@ export default function Onboarding({ onComplete }) {
             ? <div style={{ background:"#fffbeb", border:"1px solid #fde68a", borderRadius:16, padding:"14px 16px", display:"flex", gap:12, alignItems:"flex-start" }}>
                 <span style={{ fontSize:22, flexShrink:0 }}>⚠️</span>
                 <div>
-                  <div style={{ fontWeight:"700", fontSize:14, color:"#0f172a", marginBottom:4 }}>Riscos de um IMC não saudável</div>
-                  <div style={{ fontSize:12, color:"#64748b", lineHeight:1.6 }}>Hipertensão, doenças cardíacas, acidente vascular cerebral, diabetes tipo 2, alguns tipos de câncer, osteoartrite, dor nas costas.</div>
+                  <div style={{ fontWeight:"700", fontSize:15, color:"#0f172a", marginBottom:4 }}>Riscos de um IMC não saudável</div>
+                  <div style={{ fontSize:13, color:"#64748b", lineHeight:1.6 }}>Hipertensão, doenças cardíacas, acidente vascular cerebral, diabetes tipo 2, alguns tipos de câncer, osteoartrite, dor nas costas.</div>
                 </div>
               </div>
             : <div style={{ background:"#f0fdf4", border:"1px solid #86efac", borderRadius:16, padding:"14px 16px", display:"flex", gap:12, alignItems:"flex-start" }}>
                 <span style={{ fontSize:22 }}>✅</span>
                 <div>
-                  <div style={{ fontWeight:"700", fontSize:14, color:"#0f172a", marginBottom:4 }}>IMC saudável!</div>
-                  <div style={{ fontSize:12, color:"#64748b", lineHeight:1.6 }}>Vamos focar em desempenho, composição corporal e longevidade.</div>
+                  <div style={{ fontWeight:"700", fontSize:15, color:"#0f172a", marginBottom:4 }}>IMC saudável!</div>
+                  <div style={{ fontSize:13, color:"#64748b", lineHeight:1.6 }}>Vamos focar em desempenho, composição corporal e longevidade.</div>
                 </div>
               </div>
           }
@@ -421,7 +421,7 @@ export default function Onboarding({ onComplete }) {
                 padding: "18px 20px", transition: "all 0.15s",
               }}
             >
-              <span style={{ fontSize: 15, fontWeight: "500", color: "#0f172a", textAlign: "left" }}>{o.label}</span>
+              <span style={{ fontSize: 15, fontWeight: "600", color: "#0f172a", textAlign: "left" }}>{o.label}</span>
               <span style={{
                 width: 22, height: 22, borderRadius: "50%", flexShrink: 0,
                 border: sel ? "6px solid " + ACCENT : "2px solid #cbd5e1",
@@ -449,7 +449,7 @@ export default function Onboarding({ onComplete }) {
                 <div style={{ width:56, height:56, borderRadius:14, background:sel?"#dbeafe":b.bg, display:"flex", alignItems:"center", justifyContent:"center", fontSize:28, flexShrink:0 }}>{b.emoji}</div>
                 <div style={{ flex:1 }}>
                   <div style={{ fontSize:17, fontWeight:"700", color:sel?ACCENT:"#0f172a" }}>{b.label}</div>
-                  <div style={{ fontSize:12, color:"#94a3b8", marginTop:3 }}>{b.desc}</div>
+                  <div style={{ fontSize:13, color:"#94a3b8", marginTop:4 }}>{b.desc}</div>
                 </div>
                 <span style={{ width:22, height:22, borderRadius:"50%", flexShrink:0, border:sel?"7px solid "+ACCENT:"2px solid #cbd5e1", background:"#fff", display:"inline-block", transition:"all 0.15s" }} />
               </button>
@@ -476,7 +476,7 @@ export default function Onboarding({ onComplete }) {
                 <div style={{ width:56, height:56, borderRadius:14, background:sel?"#EFF6FF":b.bg, display:"flex", alignItems:"center", justifyContent:"center", fontSize:28, flexShrink:0 }}>{b.emoji}</div>
                 <div style={{ flex:1 }}>
                   <div style={{ fontSize:17, fontWeight:"700", color:sel?ACCENT:"#0f172a" }}>{b.label}</div>
-                  <div style={{ fontSize:12, color:"#94a3b8", marginTop:3 }}>{b.desc}</div>
+                  <div style={{ fontSize:13, color:"#94a3b8", marginTop:4 }}>{b.desc}</div>
                 </div>
                 <span style={{ width:22, height:22, borderRadius:"50%", flexShrink:0, border:sel?"7px solid "+ACCENT:"2px solid #cbd5e1", background:"#fff", display:"inline-block", transition:"all 0.15s" }} />
               </button>
@@ -507,7 +507,7 @@ export default function Onboarding({ onComplete }) {
                 style={{ background:on?"#EFF6FF":"#f8fafc", border:on?"2px solid "+ACCENT:"2px solid transparent", borderRadius:16, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"space-between", padding:"14px 18px", transition:"all 0.15s", boxShadow:on?"0 2px 8px rgba(37,99,235,0.12)":"0 1px 3px rgba(0,0,0,0.05)" }}>
                 <div style={{ display:"flex", alignItems:"center", gap:12 }}>
                   <span style={{ fontSize:22 }}>{emojiMap[o] || "💪"}</span>
-                  <span style={{ fontSize:15, fontWeight:"500", color:on?ACCENT:"#0f172a" }}>{o}</span>
+                  <span style={{ fontSize:15, fontWeight:"600", color:on?ACCENT:"#0f172a" }}>{o}</span>
                 </div>
                 <span style={{ width:20, height:20, borderRadius:"50%", flexShrink:0, border:on?"6px solid "+ACCENT:"2px solid #cbd5e1", background:"#fff", display:"inline-block", transition:"all 0.15s" }} />
               </button>
@@ -526,24 +526,24 @@ export default function Onboarding({ onComplete }) {
       <div style={{ flex:1, overflowY:"auto", padding:"40px 24px" }}>
         <div style={{ textAlign:"center", marginBottom:28 }}>
           <div style={{ fontSize:72 }}>🏋️</div>
-          <h2 style={{ fontSize:28, fontWeight:"900", color:"#0f172a", margin:"12px 0 4px" }}>Perfil criado!</h2>
-          <p style={{ color:"#64748b", fontSize:14, margin:0 }}>Seu plano personalizado está pronto.</p>
+          <h2 style={{ fontSize:26, fontWeight:"900", color:"#0f172a", margin:"12px 0 4px" }}>Perfil criado!</h2>
+          <p style={{ color:"#64748b", fontSize:15, margin:0 }}>Seu plano personalizado está pronto.</p>
         </div>
         <div style={{ background:"#f1f5f9", borderRadius:20, padding:20, display:"flex", flexDirection:"column", gap:12 }}>
           <div>
-            <div style={{ fontSize:11, color:"#94a3b8", fontWeight:"700", textTransform:"uppercase", letterSpacing:"0.5px" }}>Medidas</div>
-            <div style={{ fontSize:14, fontWeight:"700", color:"#0f172a", marginTop:2 }}>{ans.height_cm}cm · {ans.weight_kg}kg · {ans.age} anos</div>
+            <div style={{ fontSize:11, color:"#94a3b8", fontWeight:"700", textTransform:"uppercase", letterSpacing:"0.6px" }}>Medidas</div>
+            <div style={{ fontSize:15, fontWeight:"600", color:"#0f172a", marginTop:2 }}>{ans.height_cm}cm · {ans.weight_kg}kg · {ans.age} anos</div>
           </div>
           {bmi && <div>
-            <div style={{ fontSize:11, color:"#94a3b8", fontWeight:"700", textTransform:"uppercase", letterSpacing:"0.5px" }}>IMC</div>
-            <div style={{ fontSize:14, fontWeight:"700", color:cat ? cat.color : "#0f172a", marginTop:2 }}>{bmi} — {cat ? cat.label : ""}</div>
+            <div style={{ fontSize:11, color:"#94a3b8", fontWeight:"700", textTransform:"uppercase", letterSpacing:"0.6px" }}>IMC</div>
+            <div style={{ fontSize:15, fontWeight:"600", color:cat ? cat.color : "#0f172a", marginTop:2 }}>{bmi} — {cat ? cat.label : ""}</div>
           </div>}
           {steps.filter(s => s.type === "single" || s.type === "multi").map(s => {
             const v = ans[s.id]; if (!v) return null;
             return (
               <div key={s.id} style={{ borderTop:"1px solid #e2e8f0", paddingTop:10 }}>
-                <div style={{ fontSize:11, color:"#94a3b8", fontWeight:"700", textTransform:"uppercase", letterSpacing:"0.5px" }}>{s.question.replace("?","")}</div>
-                <div style={{ fontSize:14, fontWeight:"700", color:"#0f172a", marginTop:2 }}>{Array.isArray(v) ? v.join(", ") : v}</div>
+                <div style={{ fontSize:11, color:"#94a3b8", fontWeight:"700", textTransform:"uppercase", letterSpacing:"0.6px" }}>{s.question.replace("?","")}</div>
+                <div style={{ fontSize:15, fontWeight:"600", color:"#0f172a", marginTop:2 }}>{Array.isArray(v) ? v.join(", ") : v}</div>
               </div>
             );
           })}
@@ -569,7 +569,7 @@ export default function Onboarding({ onComplete }) {
       </div>
       <div style={{ flex:1, overflowY:"auto", padding:"16px 24px 24px" }} className="scroll-hide">
         <h1 style={S.q}>{step.question}</h1>
-        {step.subtitle && <p style={{ fontSize:13, color:"#94a3b8", margin:"0 0 8px" }}>{step.subtitle}</p>}
+        {step.subtitle && <p style={{ fontSize:13, color:"#94a3b8", margin:"0 0 10px", lineHeight:"1.5" }}>{step.subtitle}</p>}
         {renderBody()}
       </div>
       {needBtn && (
@@ -584,7 +584,7 @@ export default function Onboarding({ onComplete }) {
 }
 
 const S = {
-  q:   { fontSize:24, fontWeight:"900", color:"#0f172a", lineHeight:1.25, marginBottom:2, letterSpacing:"-0.5px", textAlign:"center" },
+  q:   { fontSize:22, fontWeight:"800", color:"#0f172a", lineHeight:1.3, marginBottom:4, letterSpacing:"-0.4px", textAlign:"center", fontFamily:"inherit" },
   opt: { background:"#f8fafc", border:"2px solid transparent", borderRadius:16, cursor:"pointer", textAlign:"left", transition:"all 0.15s", width:"100%" },
   optSel: { background:"#EFF6FF", borderColor:ACCENT },
 };
